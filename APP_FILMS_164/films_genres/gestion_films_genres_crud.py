@@ -277,18 +277,18 @@ def avoir_droit_afficher_data(valeur_id_personne_selected_dict):
     try:
 
         strsql_personne_selected = """SELECT Id_personne, nom_personne, Prenom_personne, Date_naisannce_personne, GROUP_CONCAT(id_droit) as AvoirDroit FROM t_avoir_droit
-                                        INNER JOIN t_personne ON t_personne.Id_personne = t_avoir_droit.fk_personne
-                                        INNER JOIN t_droit ON t_droit.id_droit = t_avoir_droit.fk_droit
+                                        INNER JOIN t_personne ON t_personne.Id_personne = t_avoir_droit.Fk_personne
+                                        INNER JOIN t_droit ON t_droit.id_droit = t_avoir_droit.Fk_droit
                                         WHERE Id_personne = %(value_Id_personne_selected)s"""
 
-        strsql_avoir_droit_non_attribues = """SELECT id_droit, FROM t_droit WHERE id_droit not in(SELECT Id_personne as idGenresFilms FROM t_genre_film
-                                                    INNER JOIN t_personne ON t_personne.Id_personne = t_avoir_droit.fk_personne
+        strsql_avoir_droit_non_attribues = """SELECT id_droit, droit FROM t_droit WHERE id_droit not in(SELECT Id_personne as idAvoirDroit FROM t_avoir_droit
+                                                    INNER JOIN t_personne ON t_personne.Id_personne = t_avoir_droit.Fk_personne
                                                     INNER JOIN t_droit ON t_droit.id_droit = t_avoir_droit.fk_droit
                                                     WHERE Id_personne = %(value_Id_personne_selected)s)"""
 
         strsql_avoir_droit_attribues = """SELECT Id_personne, id_droit, droit FROM t_avoir_droit
-                                            INNER JOIN t_personne ON t_personne.Id_perssonne = t_avoir_droit.fk_personne
-                                            INNER JOIN t_droit ON t_droit.id_droit = t_avoir_droit.fk_droit
+                                            INNER JOIN t_personne ON t_personne.Id_perssonne = t_avoir_droit.Fk_personne
+                                            INNER JOIN t_droit ON t_droit.id_droit = t_avoir_droit.Fk_droit
                                             WHERE Id_personne = %(value_Id_personne_selected)s"""
 
         # Du fait de l'utilisation des "context managers" on accède au curseur grâce au "with".
@@ -321,6 +321,6 @@ def avoir_droit_afficher_data(valeur_id_personne_selected_dict):
             return data_film_selected, data_avoir_droit_non_attribues, data_avoir_droit_attribues
 
     except Exception as Exception_avoir_droit_afficher_data:
-        raise ExceptionGenresFilmsAfficherData(f"fichier : {Path(__file__).name}  ;  "
+        raise ExceptionAvoirDroitAfficherData(f"fichier : {Path(__file__).name}  ;  "
                                                f"{avoir_droit_afficher_data.__name__} ; "
                                                f"{Exception_avoir_droit_afficher_data}")
