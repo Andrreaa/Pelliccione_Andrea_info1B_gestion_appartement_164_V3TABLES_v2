@@ -137,17 +137,17 @@ def film_update_wtf():
             droit_update = droit_update.capitalize()
 
 
-            valeur_update_dictionnaire = {"value_id_droit": id_droit_update,
+            valeur_update_dictionnaire = {"value_id_droit": int(id_droit_update),
                                           "value_droit": droit_update}
 
-            print("valeur_update_dictionnaire ", valeur_update_dictionnaire)
+            print("valeur_update_dictionnaire ", id_droit_update, droit_update)
 
             str_sql_update_nom_film = """UPDATE t_droit
-                                         SET id_droit = %(value_id_droit)s,
-                                         droit = %(value_droit)s,
-                                         WHERE id_droit = %(value_id_droit)s"""
+                                         SET droit = %(value_droit)s
+                                         WHERE id_droit = %(value_id_droit)s """
             with DBconnection() as mconn_bd:
                 mconn_bd.execute(str_sql_update_nom_film, valeur_update_dictionnaire)
+
 
             flash(f"Donnée mise à jour !!", "success")
             print(f"Donnée mise à jour !!")
