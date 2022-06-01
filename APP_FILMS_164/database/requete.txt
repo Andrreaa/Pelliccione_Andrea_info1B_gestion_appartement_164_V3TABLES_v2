@@ -1,0 +1,46 @@
+
+SELECT * FROM `t_personne` WHERE `prenom_personne` LIKE '%a%'
+
+Selectionne tout depuis la table "t_personne" ou la lettre "a" se trouve dans l'atribut "prenom_personne"
+
+-------------------------------------------------------------
+
+SELECT * FROM `t_adresse` WHERE `id_adresse` = 4
+
+Selectionne la table "t_adresse" qui a l'id 4
+
+-------------------------------------------------------------
+
+SELECT * FROM `t_type_lit` WHERE `id_type_lit` <= 3
+
+Selectionne tout depuis la table "t_type_lit" qui a l'id plus petit ou égal à 3
+
+-------------------------------------------------------------
+
+SELECT * FROM t_personne WHERE Date_naissance_personne > '2003'
+
+selectionne des personnes qui sont nee dans l'annee 2004 ou plus
+
+-------------------------------------------------------------
+
+SELECT * FROM t_personne WHERE Date_naissance_personne >= '2002'
+
+selectionne des personnes qui sont nee dans l'annee 2002 ou plus de prenom
+
+-------------------------------------------------------------
+
+SELECT * FROM t_personne WHERE Date_naissance_personne <'2000'
+
+selectionne les personnes nés avant l'ans 2000
+
+-------------------------------------------------------------
+
+SELECT * FROM t_adresse WHERE surface_piece ='42'
+
+selectionne directement la pièce ou la surface est égal à 42 
+
+-------------------------------------------------------------
+
+SELECT * FROM t_reservations WHERE Nombre_personne >= '1'
+
+selectionne toutes le nombre de personne qui on appeler pour reserver a partir de 1

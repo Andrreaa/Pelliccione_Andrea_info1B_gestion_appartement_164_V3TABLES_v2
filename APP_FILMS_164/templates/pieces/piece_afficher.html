@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %} Afficher PERSONNES {% endblock %}
+{% block body %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<p>
+				Personnes à disposition.
+			</p>
+						<td class="text-center" class="align-middle" style="align-items: center">
+				<a class="btn btn-primary" href="{{ url_for('genres_ajouter_wtf') }}" role="button">Ajouter une personne</a>
+			</td>
+            <table class="table table-bordered table-sm">
+            {% if data %}
+                <thead>
+                    <tr>
+                        <th class="align-middle">
+                            Id
+                        </th>
+                        <th class="align-middle">
+                            Nom
+                        </th>
+
+ 						<th class="align-middle">
+							Surface
+                        </th>
+                    </tr>
+                </thead>
+            {% endif %}
+
+            {% for row in data %}
+					<tr>
+						<td class="align-middle">
+							{{ row.Id_piece }}
+						</td>
+						<td class="align-middle">
+							{{ row.Nom_piece }}
+						</td>
+						<td class="align-middle">
+							{{ row.Surface_piece }}
+						</td>
+
+
+						<!--
+						<td class="text-center" class="align-middle">
+							<a class="btn btn-primary" href="{{ url_for('genres_ajouter_wtf') }}" role="button">Ajouter</a>
+						</td>
+						-->
+						<td class="text-center" class="align-middle">
+							<a class="btn btn-warning" href="{{ url_for('genre_update_wtf', id_personne_btn_edit_html=row.Id_personne) }}" role="button">Edit</a>
+						</td>
+						<td class="text-center" class="align-middle">
+							<a class="btn btn-danger" href="{{ url_for('genre_delete_wtf', id_personne_btn_delete_html=row.Id_personne) }}" role="button">Delete</a>
+						</td>
+					</tr>
+            {% else %}
+					<tr>
+						<td>
+							Aucun collaborateur.
+						</td>
+						<td>
+							<a class="btn btn-primary" href="{{ url_for('genres_ajouter_wtf') }}" role="button">Ajouter une personne</a>
+						</td>
+					</tr>
+            {% endfor %}
+			</table>
+
+		</div>
+	</div>
+</div>
+{% endblock %}
+

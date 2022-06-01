@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %} Afficher DROITS {% endblock %}
+{% block body %}
+<div class="container">
+	<div class="col-md-12">
+		<p>
+				Droits à disposition.
+			</p>
+		<td class="text-center" class="align-middle" style="align-items: center">
+			<a class="btn btn-primary" href="{{ url_for('film_add_wtf') }}" role="button">Ajouter un droit</a>
+		</td>
+		<table class="table table-responsive-sm">
+            {% if data %}
+				<thead>
+					<tr>
+						<th class="" >
+						  Id
+						</th>
+						<th class="" >
+						  Droit
+						</th>
+					</tr>
+				</thead>
+			{% endif %}
+			{% for row in data %}
+			<tr>
+				<td class="align-middle">
+					{{ row.id_droit }}
+				</td>
+				<td class="align-middle">
+					{{ row.droit }}
+				</td>
+				 <td class="text-center" class="align-middle">
+					 <a class="btn btn-warning" href="{{ url_for('film_update_wtf', id_droit_btn_edit_html=row.id_droit) }}" role="button">Edit</a>
+				</td>
+				<td class="text-center" class="align-middle">
+					<a class="btn btn-danger" href="{{ url_for('film_delete_wtf', id_droit_btn_delete_html=row.id_droit) }}" role="button">Delete</a>
+				</td>
+			</tr>
+			{% else %}
+				<tr>
+					<td>
+						Aucun droit.
+					</td>
+					<td>
+						<a class="btn btn-primary" href="{{ url_for('film_add_wtf') }}" role="button">Ajouter un droit</a>
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+		</table>
+
+	</div>
+</div>
+{% endblock %}
