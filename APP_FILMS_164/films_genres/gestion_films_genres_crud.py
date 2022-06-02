@@ -61,7 +61,7 @@ def avoir_droit_afficher(id_details_sel):
                     # Si l'utilisateur change l'id_film dans l'URL et qu'il ne correspond à aucun film
                     flash(f"Le film {id_details_sel} demandé n'existe pas !!", "warning")
                 else:
-                    flash(f"Données films et genres affichés !!", "success")
+                    flash(f"Données personnes et droits affichés !!", "success")
 
         except Exception as Exception_films_genres_afficher:
             raise ExceptionPersonneDroitAfficher(f"fichier : {Path(__file__).name}  ;  {avoir_droit_afficher.__name__} ;"

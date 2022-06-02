@@ -65,7 +65,7 @@ def droit_afficher(order_by, id_details_sel):
                 else:
                     # Dans tous les autres cas, c'est que la table "t_personne" est vide.
                     # OM 2020.04.09 La ligne ci-dessous permet de donner un sentiment rassurant aux utilisateurs.
-                    flash(f"Données personne affichés !!", "success")
+                    flash(f"Données droit affichés !!", "success")
 
         except Exception as Exception_genres_afficher:
             raise ExceptionGenresAfficher(f"fichier : {Path(__file__).name}  ;  "
