@@ -34,8 +34,8 @@ def avoir_droit_afficher(id_personne_sel):
             with DBconnection() as mc_afficher:
                 strsql_avoir_droit_afficher_data = """SELECT Id_personne, Nom_personne, Prenom_personne, Date_naissance_personne,
                                                             GROUP_CONCAT(droit) as AvoirDroit FROM t_avoir_droit
-                                                            RIGHT JOIN t_personne ON t_personne.Id_personne = t_avoir_droit.fk_personne
-                                                            LEFT JOIN t_droit ON t_droit.id_droit = t_avoir_droit.fk_droit
+                                                            RIGHT JOIN t_personne ON t_personne.Id_personne = t_avoir_droit.Fk_personne
+                                                            LEFT JOIN t_droit ON t_droit.id_droit = t_avoir_droit.Fk_droit
                                                             GROUP BY Id_personne"""
                 if id_personne_sel == 0:
                     # le paramètre 0 permet d'afficher tous les films
@@ -43,10 +43,10 @@ def avoir_droit_afficher(id_personne_sel):
                     mc_afficher.execute(strsql_avoir_droit_afficher_data)
                 else:
                     # Constitution d'un dictionnaire pour associer l'id du adresse sélectionné avec un nom de variable
-                    valeur_id_personne_selected_dictionnaire = {"value_Id_personne_selected": id_personne_sel}
+                    valeur_id_personne_selected_dictionnaire = {"value_id_droit_selected": id_personne_sel}
                     # En MySql l'instruction HAVING fonctionne comme un WHERE... mais doit être associée à un GROUP BY
                     # L'opérateur += permet de concaténer une nouvelle valeur à la valeur de gauche préalablement définie.
-                    strsql_avoir_droit_afficher_data += """ HAVING Id_personne= %(value_Id_personne_selected)s"""
+                    strsql_avoir_droit_afficher_data += """ HAVING id_droit= %(value_id_droit_selected)s"""
 
                     mc_afficher.execute(strsql_avoir_droit_afficher_data, valeur_id_personne_selected_dictionnaire)
 
@@ -93,7 +93,7 @@ def edit_avoir_droit_selected():
     if request.method == "GET":
         try:
             with DBconnection() as mc_afficher:
-                strsql_droit_afficher = """SELECT Id_personne, nom_personne droit FROM t_personne WHERE Id_personne ASC"""
+                strsql_droit_afficher = """SELECT Id_personne, Nom_personne, Prenom_personne, Date_naissance_personne FROM t_personne ORDER BY Id_personne ASC"""
                 mc_afficher.execute(strsql_droit_afficher)
             data_droit_all = mc_afficher.fetchall()
             print("dans edit_avoir_droit_selected ---> data_droit_all", data_droit_all)
@@ -134,7 +134,7 @@ def edit_avoir_droit_selected():
 
             # Dans le composant "tags-selector-tagselect" on doit connaître
             # les personne qui sont déjà sélectionnés.
-            lst_data_avoir_droit_old_attribues = [item['id_personne'] for item in data_avoir_droit_attribues]
+            lst_data_avoir_droit_old_attribues = [item['Id_personne'] for item in data_avoir_droit_attribues]
             session['session_lst_data_avoir_droit_old_attribues'] = lst_data_avoir_droit_old_attribues
             print("lst_data_avoir_droit_old_attribues  ", lst_data_avoir_droit_old_attribues,
                   type(lst_data_avoir_droit_old_attribues))
@@ -156,7 +156,7 @@ def edit_avoir_droit_selected():
                                                  f"{edit_avoir_droit_selected.__name__} ; "
                                                  f"{Exception_edit_avoir_droit_selected}")
 
-    return render_template("Avoir_droit/films_genres_modifier_tags_dropbox.html",
+    return render_template("avoir_droit/films_genres_modifier_tags_dropbox.html",
                            data_droit=data_droit_all,
                            data_personne_selected=data_avoir_droit_selected,
                            data_droit_attribues=data_avoir_droit_attribues,
@@ -221,11 +221,11 @@ def update_avoir_droit_selected():
 
             # SQL pour insérer une nouvelle association entre
             # "fk_film"/"id_adresse" et "fk_genre"/"Id_personne" dans la "t_genre_film"
-            strsql_insert_avoir_droit = """INSERT INTO t_avoir_droit (id_avoir_droit, fk_personne, fk_droit)
-                                                    VALUES (NULL, %(value_fk_personne)s, %(value_fk_droit)s)"""
+            strsql_insert_avoir_droit = """INSERT INTO t_avoir_droit (id_avoir_droit, Fk_personne, Fk_droit)
+                                                    VALUES (NULL, %(value_Fk_personne)s, %(value_Fk_droit)s)"""
 
             # SQL pour effacer une (des) association(s) existantes entre "id_adresse" et "Id_personne" dans la "t_genre_film"
-            strsql_delete_avoir_droit = """DELETE FROM t_avoir_droit WHERE fk_droit = %(value_fk_droit)s AND fk_personne = %(value_fk_personne)s"""
+            strsql_delete_avoir_droit = """DELETE FROM t_avoir_droit WHERE Fk_personne = %(value_Fk_personne)s AND Fk_droit = %(value_Fk_droit)s"""
 
             with DBconnection() as mconn_bd:
                 # Pour le adresse sélectionné, parcourir la liste des personne à INSÉRER dans la "t_genre_film".
@@ -233,8 +233,8 @@ def update_avoir_droit_selected():
                 for id_droit_ins in lst_diff_droit_insert_a:
                     # Constitution d'un dictionnaire pour associer l'id du adresse sélectionné avec un nom de variable
                     # et "id_genre_ins" (l'id du genre dans la liste) associé à une variable.
-                    valeurs_personne_sel_droit_sel_dictionnaire = {"value_fk_personne": id_personne_selected,
-                                                               "value_fk_droit": id_droit_ins}
+                    valeurs_personne_sel_droit_sel_dictionnaire = {"value_Fk_personne": id_personne_selected,
+                                                               "value_Fk_droit": id_droit_ins}
 
                     mconn_bd.execute(strsql_insert_avoir_droit, valeurs_personne_sel_droit_sel_dictionnaire)
 
@@ -243,8 +243,8 @@ def update_avoir_droit_selected():
                 for id_droit_del in lst_diff_genres_delete_b:
                     # Constitution d'un dictionnaire pour associer l'id du adresse sélectionné avec un nom de variable
                     # et "id_genre_del" (l'id du genre dans la liste) associé à une variable.
-                    valeurs_film_sel_genre_sel_dictionnaire = {"value_fk_personne": id_personne_selected,
-                                                               "value_fk_droit": id_droit_del}
+                    valeurs_film_sel_genre_sel_dictionnaire = {"value_Fk_personne": id_personne_selected,
+                                                               "value_Fk_droit": id_droit_del}
 
                     # Du fait de l'utilisation des "context managers" on accède au curseur grâce au "with".
                     # la subtilité consiste à avoir une méthode "execute" dans la classe "DBconnection"
@@ -258,8 +258,8 @@ def update_avoir_droit_selected():
                                                    f"{Exception_update_avoir_droit_selected}")
 
     # Après cette mise à jour de la table intermédiaire "t_genre_film",
-    # on affiche les films et le(urs) genre(s) associé(s).
-    return redirect(url_for('droit_afficher', id_personne_sel=id_personne_selected))
+    # on affiche les films et le(urs) genre(s associé(s).
+    return redirect(url_for('avoir_droit_afficher', id_personne_sel=id_personne_selected))
 
 
 """
@@ -276,20 +276,28 @@ def avoir_droit_afficher_data(valeur_id_personne_selected_dict):
     print("valeur_id_personne_selected_dict...", valeur_id_personne_selected_dict)
     try:
 
-        strsql_personne_selected = """SELECT Id_personne, nom_personne, Prenom_personne, Date_naisannce_personne, GROUP_CONCAT(id_droit) as AvoirDroit FROM t_avoir_droit
-                                        INNER JOIN t_personne ON t_personne.Id_personne = t_avoir_droit.Fk_personne
+        strsql_personne_selected = """  
+                                        SELECT id_droit, droit,
+                                        GROUP_CONCAT(Id_personne) as 'PersonneDroit' FROM t_avoir_droit
                                         INNER JOIN t_droit ON t_droit.id_droit = t_avoir_droit.Fk_droit
-                                        WHERE Id_personne = %(value_Id_personne_selected)s"""
+                                        INNER JOIN t_personne ON t_personne.Id_personne = t_avoir_droit.Fk_personne
+                                        WHERE id_droit = %(value_Id_personne_selected)s)
+                                    """
 
-        strsql_avoir_droit_non_attribues = """SELECT id_droit, droit FROM t_droit WHERE id_droit not in(SELECT Id_personne as idAvoirDroit FROM t_avoir_droit
-                                                    INNER JOIN t_personne ON t_personne.Id_personne = t_avoir_droit.Fk_personne
-                                                    INNER JOIN t_droit ON t_droit.id_droit = t_avoir_droit.fk_droit
-                                                    WHERE Id_personne = %(value_Id_personne_selected)s)"""
+        strsql_avoir_droit_non_attribues = """
+                                                SELECT Id_personne, Nom_personne, Prenom_personne, Date_naissance_personne FROM t_personne
+                                                WHERE Id_personne not in (SELECT Id_personne as idPersonneDroit' FROM t_avoir_droit
+                                                    INNER JOIN t_droit ON t_droit.id_droit = t_avoir_droit.Fk_droit
+                                                    INNER JOIN t_personne ON t_personne.Id_personne = t_avoir_droit_Fk_personne
+                                                    WHERE id_droit = %(value_Id_personne_selected)s)
+                                            """
 
-        strsql_avoir_droit_attribues = """SELECT Id_personne, id_droit, droit FROM t_avoir_droit
-                                            INNER JOIN t_personne ON t_personne.Id_perssonne = t_avoir_droit.Fk_personne
+        strsql_avoir_droit_attribues = """
+                                            SELECT id_droit, Id_personne, Nom_personne, Prenom_personne, Date_naissance_personne FROM t_avoir_droit
                                             INNER JOIN t_droit ON t_droit.id_droit = t_avoir_droit.Fk_droit
-                                            WHERE Id_personne = %(value_Id_personne_selected)s"""
+                                            INNER JOIN t_personne ON t_personne.Id_personne = t_avoir_droit.Fk_personne
+                                            WHERE id_droit = %(value_Id_personne_selected)s)
+                                        """
 
         # Du fait de l'utilisation des "context managers" on accède au curseur grâce au "with".
         with DBconnection() as mc_afficher:
