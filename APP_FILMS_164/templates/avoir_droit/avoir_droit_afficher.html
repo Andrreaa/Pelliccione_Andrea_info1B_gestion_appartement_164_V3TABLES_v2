@@ -34,13 +34,10 @@
 					  </th>
 
 					  <th class="align-middle">
-						<a class="btn btn-primary" href="{{ url_for('film_add_wtf') }}" role="button">Ajouter</a>
+						<a class="btn btn-warning" href="{{ url_for('genre_update_wtf', id_personne_btn_edit_html=row.Id_personne) }}" role="button">Edit</a>
 					  </th>
 					  <th class="align-middle">
-						<a class="btn btn-warning" href="{{ url_for('film_update_wtf', id_avoir_droit_edit_html=row.id_adresse) }}" role="button">Edit</a>
-					  </th>
-					  <th class="align-middle">
-						<a class="btn btn-danger" href="{{ url_for('film_delete_wtf', id_droit_btn_delete_html=row.id_adresse ) }}" role="button">Delete</a>
+						<a class="btn btn-danger" href="{{ url_for('genre_delete_wtf', id_personne_btn_delete_html=row.Id_personne) }}" role="button">Delete</a>
 					  </th>
 					<tr>
 						<td class="align-middle">

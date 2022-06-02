@@ -93,7 +93,7 @@ def edit_avoir_droit_selected():
     if request.method == "GET":
         try:
             with DBconnection() as mc_afficher:
-                strsql_droit_afficher = """SELECT id_droit, droit ASC"""
+                strsql_droit_afficher = """SELECT Id_personne, nom_personne droit FROM t_personne WHERE Id_personne ASC"""
                 mc_afficher.execute(strsql_droit_afficher)
             data_droit_all = mc_afficher.fetchall()
             print("dans edit_avoir_droit_selected ---> data_droit_all", data_droit_all)
@@ -102,7 +102,7 @@ def edit_avoir_droit_selected():
             # l'utilisateur clique sur le bouton "Modifier" et on récupère la valeur de "id_adresse"
             # grâce à la variable "id_film_genres_edit_html" dans le fichier "avoir_droit_afficher.html"
             # href="{{ url_for('edit_avoir_droit_selected', id_film_genres_edit_html=row.id_adresse) }}"
-            id_avoir_droit_edit = request.values['id_avoir_droit_edit_html']
+            id_avoir_droit_edit = request.values['id_avoir_personne_edit_html']
 
             # Mémorise l'id du adresse dans une variable de session
             # (ici la sécurité de l'application n'est pas engagée)
@@ -134,7 +134,7 @@ def edit_avoir_droit_selected():
 
             # Dans le composant "tags-selector-tagselect" on doit connaître
             # les personne qui sont déjà sélectionnés.
-            lst_data_avoir_droit_old_attribues = [item['id_droit'] for item in data_avoir_droit_attribues]
+            lst_data_avoir_droit_old_attribues = [item['id_personne'] for item in data_avoir_droit_attribues]
             session['session_lst_data_avoir_droit_old_attribues'] = lst_data_avoir_droit_old_attribues
             print("lst_data_avoir_droit_old_attribues  ", lst_data_avoir_droit_old_attribues,
                   type(lst_data_avoir_droit_old_attribues))
