@@ -37,7 +37,7 @@
 
 			</p>
             <p>
-                Films.
+                Personnes.
             </p>
             <table class="table table-responsive-sm">
                 {% if data_film_selected %}
@@ -47,9 +47,14 @@
                                 id
                             </th>
                             <th class="">
-                                Droit
+                                Nom
                             </th>
-
+                            <th class="">
+                                Personne
+                            </th>
+                            <th class="">
+                                Date de naissance
+                            </th>
                         </tr>
                     </thead>
             {% endif %}
@@ -58,10 +63,16 @@
 				<tbody>
 					<tr>
 						<td class="align-middle">
-							{{ row.id_droit }}
+							{{ row.Id_personne }}
 						</td>
 						<td class="align-middle">
-							{{ row.droit }}
+							{{ row.Nom_personne }}
+						</td>
+                        <td class="align-middle">
+							{{ row.Prenom_personne }}
+						</td>
+                        <td class="align-middle">
+							{{ row.Date_naissance_personne }}
 						</td>
 					</tr>
 				</tbody>
@@ -85,15 +96,15 @@
     <div class="row mx-md-n5">
       <div class="col px-md-5">
           <div class="p-3">
-            <form id="form_tags_select_confirm" action="{{ url_for('update_avoir_droit_selected') }}" method="POST">
+            <form id="form_tags_select_confirm" action="{{ url_for('update_genre_film_selected') }}" method="POST">
                 <div class="qtagselect isw360">
                     <select id="OM_JTSD" name="name_select_tags" class="qtagselect__select" multiple>
                         {% for row in data_genres_non_attribues %}
-                            <option value="{{ row.Id_personne }}" name="name_tags_non_attribues_html" class="isblue" >{{ row.Nom_personne }}</option>
+                            <option value="{{ row.id_droit }}" name="name_tags_non_attribues_html" class="isblue" >{{ row.droit }}</option>
                         {% endfor %}
 
                         {% for row in data_genres_attribues %}
-                            <option value="{{ row.Id_personne }}" name="name_tags_attribues_html" class="ispurple" selected>{{ row.Nom_personne }}</option>
+                            <option value="{{ row.id_droit }}" name="name_tags_attribues_html" class="ispurple" selected>{{ row.droit }}</option>
                         {% endfor %}
                     </select>
                 </div>

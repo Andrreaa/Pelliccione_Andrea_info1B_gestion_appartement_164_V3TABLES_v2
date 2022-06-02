@@ -99,15 +99,14 @@ class ExceptionPersonneDroitAfficher(Base):
     pass
 
 
-class ExceptionEditDroitPersonneSelected(Base):
+class ExceptionEditGenreFilmSelected(Base):
     pass
 
 
 class ExceptionUpdateGenreFilmSelected(Base):
     pass
 
-
-class ExceptionAvoirDroitAfficherData(Base):
+class ExceptionGenresFilmsAfficherData(Base):
     pass
 
 
