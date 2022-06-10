@@ -65,7 +65,7 @@ def personnes_taille_dict():
         # Tout se passe normalement
         print(f'{nom_personne} mesure {taille_personnes_dict[nom_personne]} [cm]')
     except KeyError:
-        # Une personne ne se trouve pas dans le dictionnaire
+        # Une personnes ne se trouve pas dans le dictionnaire
         # DEBUG bon marché : Pour afficher un message d'erreur dans la console
         print(f"{nom_personne} n'existe pas !")
 
@@ -81,7 +81,7 @@ def personnes_taille_dict():
 
         # Il renvoie un texte avec la valeur de "nom_personne" et c'est dans le fichier
         # grâce à la classe "MonErreur(Exception)" dans le fichier "exceptions.py"
-        # raise MonErreur(f"il y a une erreur ! La personne {nom_personne} n'existe pas dans le dictionnaire")
+        # raise MonErreur(f"il y a une erreur ! La personnes {nom_personne} n'existe pas dans le dictionnaire")
 
         # Celle-ci est assez complète... mais il y a toujours mieux
         # Il renvoie un texte avec la valeur de "nom_personne" ainsi qu'un message personnalisé

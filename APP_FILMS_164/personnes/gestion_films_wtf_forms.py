@@ -1,4 +1,4 @@
-"""Gestion des formulaires avec WTF pour les films
+"""Gestion des formulaires avec WTF pour les droits
 Fichier : gestion_films_wtf_forms.py
 Auteur : OM 2022.04.11
 
@@ -13,7 +13,7 @@ from wtforms.widgets import TextArea
 
 class FormWTFAddFilm(FlaskForm):
     """
-        Dans le formulaire "genres_ajouter_wtf.html" on impose que le champ soit rempli.
+        Dans le formulaire "personne_ajouter_wtf.html" on impose que le champ soit rempli.
         Définition d'un "bouton" submit avec un libellé personnalisé.
     """
     nom_film_regexp = ""
@@ -30,7 +30,7 @@ class FormWTFAddFilm(FlaskForm):
 
 class FormWTFUpdateFilm(FlaskForm):
     """
-        Dans le formulaire "film_update_wtf.html" on impose que le champ soit rempli.
+        Dans le formulaire "droit_update_wtf.html" on impose que le champ soit rempli.
         Définition d'un "bouton" submit avec un libellé personnalisé.
     """
 
@@ -68,7 +68,7 @@ class FormWTFUpdateFilm(FlaskForm):
 
 class FormWTFDeleteFilm(FlaskForm):
     """
-        Dans le formulaire "film_delete_wtf.html"
+        Dans le formulaire "droit_delete_wtf.html"
 
         nom_film_delete_wtf : Champ qui reçoit la valeur du droit, lecture seule. (readonly=true)
         submit_btn_del : Bouton d'effacement "DEFINITIF".

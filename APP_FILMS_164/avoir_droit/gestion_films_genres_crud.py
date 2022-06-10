@@ -1,7 +1,7 @@
 """
     Fichier : gestion_films_genres_crud.py
     Auteur : OM 2021.05.01
-    Gestions des "routes" FLASK et des données pour l'association entre les films et les genres.
+    Gestions des "routes" FLASK et des données pour l'association entre les droits et les droits.
 """
 from pathlib import Path
 
@@ -18,9 +18,9 @@ from APP_FILMS_164.erreurs.exceptions import *
     Auteur : OM 2021.05.01
     Définition d'une "route" /films_genres_afficher
 
-    But : Afficher les films avec les genres associés pour chaque film.
+    But : Afficher les droits avec les droits associés pour chaque film.
 
-    Paramètres : id_genre_sel = 0 >> tous les films.
+    Paramètres : id_genre_sel = 0 >> tous les droits.
                  id_genre_sel = "n" affiche le film dont l'id est "n"
 
 """
@@ -38,7 +38,7 @@ def avoir_droit_afficher(id_details_sel):
                                                             LEFT JOIN t_droit ON t_droit.id_droit = t_avoir_droit.Fk_droit
                                                             GROUP BY Id_personne"""
                 if id_details_sel == 0:
-                    # le paramètre 0 permet d'afficher tous les films
+                    # le paramètre 0 permet d'afficher tous les droits
                     # Sinon le paramètre représente la valeur de l'id du film
                     mc_afficher.execute(strsql_genres_films_afficher_data)
                 else:
@@ -98,8 +98,8 @@ def edit_genre_film_selected():
 
             # Récupère les données grâce à 3 requêtes MySql définie dans la fonction genres_films_afficher_data
             # 1) Sélection du film choisi
-            # 2) Sélection des genres "déjà" attribués pour le film.
-            # 3) Sélection des genres "pas encore" attribués pour le film choisi.
+            # 2) Sélection des droits "déjà" attribués pour le film.
+            # 3) Sélection des droits "pas encore" attribués pour le film choisi.
             # ATTENTION à l'ordre d'assignation des variables retournées par la fonction "genres_films_afficher_data"
             data_genre_film_selected, data_genres_films_non_attribues, data_genres_films_attribues = \
                 genres_films_afficher_data(valeur_id_film_selected_dictionnaire)
@@ -110,14 +110,14 @@ def edit_genre_film_selected():
                   type(lst_data_film_selected))
 
             # Dans le composant "tags-selector-tagselect" on doit connaître
-            # les genres qui ne sont pas encore sélectionnés.
+            # les droits qui ne sont pas encore sélectionnés.
             lst_data_genres_films_non_attribues = [item['id_droit'] for item in data_genres_films_non_attribues]
             session['session_lst_data_genres_films_non_attribues'] = lst_data_genres_films_non_attribues
             print("lst_data_genres_films_non_attribues  ", lst_data_genres_films_non_attribues,
                   type(lst_data_genres_films_non_attribues))
 
             # Dans le composant "tags-selector-tagselect" on doit connaître
-            # les genres qui sont déjà sélectionnés.
+            # les droits qui sont déjà sélectionnés.
             lst_data_genres_films_old_attribues = [item['id_droit'] for item in data_genres_films_attribues]
             session['session_lst_data_genres_films_old_attribues'] = lst_data_genres_films_old_attribues
             print("lst_data_genres_films_old_attribues  ", lst_data_genres_films_old_attribues,
@@ -140,7 +140,7 @@ def edit_genre_film_selected():
                                                  f"{edit_genre_film_selected.__name__} ; "
                                                  f"{Exception_edit_genre_film_selected}")
 
-    return render_template("avoir_droit/films_genres_modifier_tags_dropbox.html",
+    return render_template("avoir_droit/avoir_droit_modifier_tags_dropbox.html",
                            data_genres=data_genres_all,
                            data_film_selected=data_genre_film_selected,
                            data_genres_attribues=data_genres_films_attribues,
@@ -155,18 +155,18 @@ def update_genre_film_selected():
             id_film_selected = session['session_id_film_genres_edit']
             print("session['session_id_film_genres_edit'] ", session['session_id_film_genres_edit'])
 
-            # Récupère la liste des genres qui ne sont pas associés au film sélectionné.
+            # Récupère la liste des droits qui ne sont pas associés au film sélectionné.
             old_lst_data_genres_films_non_attribues = session['session_lst_data_genres_films_non_attribues']
             print("old_lst_data_genres_films_non_attribues ", old_lst_data_genres_films_non_attribues)
 
-            # Récupère la liste des genres qui sont associés au film sélectionné.
+            # Récupère la liste des droits qui sont associés au film sélectionné.
             old_lst_data_genres_films_attribues = session['session_lst_data_genres_films_old_attribues']
             print("old_lst_data_genres_films_old_attribues ", old_lst_data_genres_films_attribues)
 
             # Effacer toutes les variables de session.
             session.clear()
 
-            # Récupère ce que l'utilisateur veut modifier comme genres dans le composant "tags-selector-tagselect"
+            # Récupère ce que l'utilisateur veut modifier comme droits dans le composant "tags-selector-tagselect"
             # dans le fichier "genres_films_modifier_tags_dropbox.html"
             new_lst_str_genres_films = request.form.getlist('name_select_tags')
             print("new_lst_str_genres_films ", new_lst_str_genres_films)
@@ -198,7 +198,7 @@ def update_genre_film_selected():
             strsql_delete_genre_film = """DELETE FROM t_avoir_droit WHERE Fk_droit = %(value_fk_genre)s AND Fk_personne = %(value_fk_film)s"""
 
             with DBconnection() as mconn_bd:
-                # Pour le film sélectionné, parcourir la liste des genres à INSÉRER dans la "t_genre_film".
+                # Pour le film sélectionné, parcourir la liste des droits à INSÉRER dans la "t_genre_film".
                 # Si la liste est vide, la boucle n'est pas parcourue.
                 for id_genre_ins in lst_diff_genres_insert_a:
                     # Constitution d'un dictionnaire pour associer l'id du film sélectionné avec un nom de variable
@@ -208,7 +208,7 @@ def update_genre_film_selected():
 
                     mconn_bd.execute(strsql_insert_genre_film, valeurs_film_sel_genre_sel_dictionnaire)
 
-                # Pour le film sélectionné, parcourir la liste des genres à EFFACER dans la "t_genre_film".
+                # Pour le film sélectionné, parcourir la liste des droits à EFFACER dans la "t_genre_film".
                 # Si la liste est vide, la boucle n'est pas parcourue.
                 for id_genre_del in lst_diff_genres_delete_b:
                     # Constitution d'un dictionnaire pour associer l'id du film sélectionné avec un nom de variable
@@ -228,7 +228,7 @@ def update_genre_film_selected():
                                                    f"{Exception_update_genre_film_selected}")
 
     # Après cette mise à jour de la table intermédiaire "t_genre_film",
-    # on affiche les films et le(urs) genre(s) associé(s).
+    # on affiche les droits et le(urs) genre(s) associé(s).
     return redirect(url_for('avoir_droit_afficher', id_details_sel=id_film_selected))
 
 def genres_films_afficher_data(valeur_id_film_selected_dict):

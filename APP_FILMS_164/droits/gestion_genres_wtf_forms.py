@@ -12,7 +12,7 @@ from wtforms.validators import Regexp
 
 class FormWTFAjouterGenres(FlaskForm):
     """
-        Dans le formulaire "genres_ajouter_wtf.html" on impose que le champ soit rempli.
+        Dans le formulaire "personne_ajouter_wtf.html" on impose que le champ soit rempli.
         Définition d'un "bouton" submit avec un libellé personnalisé.
     """
     nom_genre_regexp = "^([A-Z]|[a-zÀ-ÖØ-öø-ÿ])[A-Za-zÀ-ÖØ-öø-ÿ]*['\- ]?[A-Za-zÀ-ÖØ-öø-ÿ]+$"
@@ -34,12 +34,12 @@ class FormWTFAjouterGenres(FlaskForm):
 
 
 
-    submit = SubmitField("Enregistrer personne")
+    submit = SubmitField("Enregistrer personnes")
 
 
 class FormWTFUpdateGenre(FlaskForm):
     """
-        Dans le formulaire "genre_update_wtf.html" on impose que le champ soit rempli.
+        Dans le formulaire "personne_update_wtf.html" on impose que le champ soit rempli.
         Définition d'un "bouton" submit avec un libellé personnalisé.
     """
     nom_genre_update_regexp = "^([A-Z]|[a-zÀ-ÖØ-öø-ÿ])[A-Za-zÀ-ÖØ-öø-ÿ]*['\- ]?[A-Za-zÀ-ÖØ-öø-ÿ]+$"
@@ -64,21 +64,21 @@ class FormWTFUpdateGenre(FlaskForm):
                                                       ])
     Date_naissance_personne_wtf = DateField("Modifié date naissance", validators=[InputRequired("Date obligatoire"),
                                                                DataRequired("Date non valide")])
-    submit = SubmitField("Update personne")
+    submit = SubmitField("Update personnes")
 
 
 class FormWTFDeleteGenre(FlaskForm):
     """
-        Dans le formulaire "genre_delete_wtf.html"
+        Dans le formulaire "personne_delete_wtf.html"
 
         nom_genre_delete_wtf : Champ qui reçoit la valeur du genre, lecture seule. (readonly=true)
         submit_btn_del : Bouton d'effacement "DEFINITIF".
         submit_btn_conf_del : Bouton de confirmation pour effacer un "genre".
         submit_btn_annuler : Bouton qui permet d'afficher la table "t_personne".
     """
-    nom_genre_delete_wtf = StringField("Effacer cette personne")
+    nom_genre_delete_wtf = StringField("Effacer cette personnes")
     prenom_genre_delete_wtf = StringField("")
     date_genre_delete_wtf = DateField("")
-    submit_btn_del = SubmitField("Effacer personne")
+    submit_btn_del = SubmitField("Effacer personnes")
     submit_btn_conf_del = SubmitField("Etes-vous sur d'effacer ?")
     submit_btn_annuler = SubmitField("Annuler")

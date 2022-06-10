@@ -1,4 +1,4 @@
-"""Gestion des "routes" FLASK et des données pour les films.
+"""Gestion des "routes" FLASK et des données pour les droits.
 Fichier : gestion_films_crud.py
 Auteur : OM 2022.04.11
 """
@@ -11,11 +11,11 @@ from flask import url_for
 
 from APP_FILMS_164.database.database_tools import DBconnection
 from APP_FILMS_164.erreurs.exceptions import *
-from APP_FILMS_164.films.gestion_films_wtf_forms import FormWTFAddFilm
-from APP_FILMS_164.films.gestion_films_wtf_forms import FormWTFUpdateFilm
-from APP_FILMS_164.films.gestion_films_wtf_forms import FormWTFDeleteFilm
+from APP_FILMS_164.personnes.gestion_films_wtf_forms import FormWTFAddFilm
+from APP_FILMS_164.personnes.gestion_films_wtf_forms import FormWTFUpdateFilm
+from APP_FILMS_164.personnes.gestion_films_wtf_forms import FormWTFDeleteFilm
 
-"""Ajouter un droit grâce au formulaire "film_add_wtf.html"
+"""Ajouter un droit grâce au formulaire "droit_add_wtf.html"
 Auteur : OM 2022.04.11
 Définition d'une "route" /film_add
 
@@ -24,7 +24,7 @@ Test : exemple: cliquer sur le menu "Films/Genres" puis cliquer sur le bouton "A
 Paramètres : sans
 
 
-Remarque :  Dans le champ "nom_film_update_wtf" du formulaire "films/films_update_wtf.html",
+Remarque :  Dans le champ "nom_film_update_wtf" du formulaire "droits/films_update_wtf.html",
             le contrôle de la saisie s'effectue ici en Python dans le fichier ""
             On ne doit pas accepter un champ vide.
 """
@@ -73,7 +73,7 @@ def droit_afficher(order_by, id_details_sel):
                                           f"{Exception_genres_afficher}")
 
     # Envoie la page "HTML" au serveur.
-    return render_template("films/films_afficher.html", data=data_genres)
+    return render_template("droits/droit_afficher.html", data=data_genres)
 
 
 @app.route("/film_add", methods=['GET', 'POST'])
@@ -95,7 +95,7 @@ def film_add_wtf():
                 flash(f"Données insérées !!", "success")
                 print(f"Données insérées !!")
 
-                # Pour afficher et constater l'insertion du nouveau droit (id_personne_sel=0 => afficher tous les films)
+                # Pour afficher et constater l'insertion du nouveau droit (id_personne_sel=0 => afficher tous les droits)
                 return redirect(url_for('droit_afficher', order_by='DESC', id_details_sel=0))
 
         except Exception as Exception_genres_ajouter_wtf:
@@ -103,7 +103,7 @@ def film_add_wtf():
                                             f"{film_add_wtf.__name__} ; "
                                             f"{Exception_genres_ajouter_wtf}")
 
-    return render_template("films/film_add_wtf.html", form_add_film=form_add_film)
+    return render_template("droits/droit_add_wtf.html", form_add_film=form_add_film)
 
 
 """Editer(update) un droit qui a été sélectionné dans le formulaire "avoir_droit_afficher.html"
@@ -116,7 +116,7 @@ Paramètres : sans
 
 But : Editer(update) un genre qui a été sélectionné dans le formulaire "personne_afficher.html"
 
-Remarque :  Dans le champ "nom_film_update_wtf" du formulaire "films/films_update_wtf.html",
+Remarque :  Dans le champ "nom_film_update_wtf" du formulaire "droits/films_update_wtf.html",
             le contrôle de la saisie s'effectue ici en Python.
             On ne doit pas accepter un champ vide.
 """
@@ -132,7 +132,7 @@ def film_update_wtf():
     try:
         print(" on submit ", form_update_film.validate_on_submit())
         if form_update_film.validate_on_submit():
-            # Récupèrer la valeur du champ depuis "genre_update_wtf.html" après avoir cliqué sur "SUBMIT".
+            # Récupèrer la valeur du champ depuis "personne_update_wtf.html" après avoir cliqué sur "SUBMIT".
             droit_update = form_update_film.nom_film_update_wtf.data
             droit_update = droit_update.capitalize()
 
@@ -167,7 +167,7 @@ def film_update_wtf():
 
             print("data_film ", data_film, " type ", type(data_film), " genre ",data_film["droit"])
 
-            # Afficher la valeur sélectionnée dans le champ du formulaire "film_update_wtf.html"
+            # Afficher la valeur sélectionnée dans le champ du formulaire "droit_update_wtf.html"
             form_update_film.nom_film_update_wtf.data = data_film["droit"]
 
             # Debug simple pour contrôler la valeur dans la console "run" de PyCharm
@@ -179,7 +179,7 @@ def film_update_wtf():
                                      f"{film_update_wtf.__name__} ; "
                                      f"{Exception_film_update_wtf}")
 
-    return render_template("films/film_update_wtf.html", form_update_film=form_update_film)
+    return render_template("droits/droit_update_wtf.html", form_update_film=form_update_film)
 
 
 """Effacer(delete) un droit qui a été sélectionné dans le formulaire "avoir_droit_afficher.html"
@@ -190,7 +190,7 @@ Test : ex. cliquer sur le menu "droit" puis cliquer sur le bouton "DELETE" d'un 
     
 Paramètres : sans
 
-Remarque :  Dans le champ "nom_film_delete_wtf" du formulaire "films/film_delete_wtf.html"
+Remarque :  Dans le champ "nom_film_delete_wtf" du formulaire "droits/droit_delete_wtf.html"
             On doit simplement cliquer sur "DELETE"
 """
 
@@ -206,13 +206,13 @@ def film_delete_wtf():
     # Objet formulaire pour effacer le droit sélectionné.
     form_delete_film = FormWTFDeleteFilm()
     try:
-        # Si on clique sur "ANNULER", afficher tous les films.
+        # Si on clique sur "ANNULER", afficher tous les droits.
         if form_delete_film.submit_btn_annuler.data:
             return redirect(url_for('droit_afficher', order_by='ASC', id_details_sel=0))
 
         if form_delete_film.submit_btn_conf_del_film.data:
             # Récupère les données afin d'afficher à nouveau
-            # le formulaire "films/film_delete_wtf.html" lorsque le bouton "Etes-vous sur d'effacer ?" est cliqué.
+            # le formulaire "droits/droit_delete_wtf.html" lorsque le bouton "Etes-vous sur d'effacer ?" est cliqué.
             data_film_delete = session['data_film_delete']
             print("data_film_delete ", data_film_delete)
 
@@ -252,10 +252,10 @@ def film_delete_wtf():
                 print("data_film_delete...", data_film_delete)
 
                 # Nécessaire pour mémoriser les données afin d'afficher à nouveau
-                # le formulaire "films/film_delete_wtf.html" lorsque le bouton "Etes-vous sur d'effacer ?" est cliqué.
+                # le formulaire "droits/droit_delete_wtf.html" lorsque le bouton "Etes-vous sur d'effacer ?" est cliqué.
                 session['data_film_delete'] = data_film_delete
 
-            # Le bouton pour l'action "DELETE" dans le form. "film_delete_wtf.html" est caché.
+            # Le bouton pour l'action "DELETE" dans le form. "droit_delete_wtf.html" est caché.
             btn_submit_del = False
 
     except Exception as Exception_film_delete_wtf:
@@ -263,7 +263,7 @@ def film_delete_wtf():
                                      f"{film_delete_wtf.__name__} ; "
                                      f"{Exception_film_delete_wtf}")
 
-    return render_template("films/film_delete_wtf.html",
+    return render_template("droits/droit_delete_wtf.html",
                            form_delete_film=form_delete_film,
                            btn_submit_del=btn_submit_del,
                            data_film_del=data_film_delete

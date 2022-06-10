@@ -1,4 +1,4 @@
-"""Gestion des "routes" FLASK et des données pour les personne.
+"""Gestion des "routes" FLASK et des données pour les personnes.
 Fichier : gestion_genres_crud.py
 Auteur : OM 2021.03.16
 """
@@ -12,9 +12,9 @@ from flask import url_for
 from APP_FILMS_164 import app
 from APP_FILMS_164.database.database_tools import DBconnection
 from APP_FILMS_164.erreurs.exceptions import *
-from APP_FILMS_164.genres.gestion_genres_wtf_forms import FormWTFAjouterGenres
-from APP_FILMS_164.genres.gestion_genres_wtf_forms import FormWTFDeleteGenre
-from APP_FILMS_164.genres.gestion_genres_wtf_forms import FormWTFUpdateGenre
+from APP_FILMS_164.droits.gestion_genres_wtf_forms import FormWTFAjouterGenres
+from APP_FILMS_164.droits.gestion_genres_wtf_forms import FormWTFDeleteGenre
+from APP_FILMS_164.droits.gestion_genres_wtf_forms import FormWTFUpdateGenre
 
 """
     Auteur : OM 2021.03.16
@@ -23,7 +23,7 @@ from APP_FILMS_164.genres.gestion_genres_wtf_forms import FormWTFUpdateGenre
     Test : ex : http://127.0.0.1:5005/genres_afficher
     
     Paramètres : order_by : ASC : Ascendant, DESC : Descendant
-                id_genre_sel = 0 >> tous les personne.
+                id_genre_sel = 0 >> tous les personnes.
                 id_genre_sel = "n" affiche le genre dont l'id est "n"
 """
 
@@ -60,11 +60,11 @@ def genres_afficher(order_by, id_genre_sel):
                     flash("""La table "t_personne" est vide. !!""", "warning")
                 elif not data_genres and id_genre_sel > 0:
                     # Si l'utilisateur change l'Id_personne dans l'URL et que le genre n'existe pas,
-                    flash(f"Le personne demandé n'existe pas !!", "warning")
+                    flash(f"Le personnes demandé n'existe pas !!", "warning")
                 else:
                     # Dans tous les autres cas, c'est que la table "t_personne" est vide.
                     # OM 2020.04.09 La ligne ci-dessous permet de donner un sentiment rassurant aux utilisateurs.
-                    flash(f"Données personne affichés !!", "success")
+                    flash(f"Données personnes affichés !!", "success")
 
         except Exception as Exception_genres_afficher:
             raise ExceptionGenresAfficher(f"fichier : {Path(__file__).name}  ;  "
@@ -72,7 +72,7 @@ def genres_afficher(order_by, id_genre_sel):
                                           f"{Exception_genres_afficher}")
 
     # Envoie la page "HTML" au serveur.
-    return render_template("personne/personne_afficher.html", data=data_genres)
+    return render_template("personnes/personne_afficher.html", data=data_genres)
 
 
 """
@@ -85,7 +85,7 @@ def genres_afficher(order_by, id_genre_sel):
     
     But : Ajouter un genre pour un adresse
     
-    Remarque :  Dans le champ "name_genre_html" du formulaire "personne/genres_ajouter.html",
+    Remarque :  Dans le champ "name_genre_html" du formulaire "personnes/genres_ajouter.html",
                 le contrôle de la saisie s'effectue ici en Python.
                 On transforme la saisie en minuscules.
                 On ne doit pas accepter des valeurs vides, des valeurs avec des chiffres,
@@ -124,20 +124,20 @@ def genres_ajouter_wtf():
                                             f"{genres_ajouter_wtf.__name__} ; "
                                             f"{Exception_genres_ajouter_wtf}")
 
-    return render_template("personne/genres_ajouter_wtf.html", form=form)
+    return render_template("personnes/personne_ajouter_wtf.html", form=form)
 
 
 """
     Auteur : OM 2021.03.29
     Définition d'une "route" /genre_update
     
-    Test : ex cliquer sur le menu "personne" puis cliquer sur le bouton "EDIT" d'un "genre"
+    Test : ex cliquer sur le menu "personnes" puis cliquer sur le bouton "EDIT" d'un "genre"
     
     Paramètres : sans
     
     But : Editer(update) un genre qui a été sélectionné dans le formulaire "personne_afficher.html"
     
-    Remarque :  Dans le champ "nom_genre_update_wtf" du formulaire "personne/genre_update_wtf.html",
+    Remarque :  Dans le champ "nom_genre_update_wtf" du formulaire "personnes/personne_update_wtf.html",
                 le contrôle de la saisie s'effectue ici en Python.
                 On transforme la saisie en minuscules.
                 On ne doit pas accepter des valeurs vides, des valeurs avec des chiffres,
@@ -157,7 +157,7 @@ def genre_update_wtf():
     try:
         print(" on submit ", form_update.validate_on_submit())
         if form_update.validate_on_submit():
-            # Récupèrer la valeur du champ depuis "genre_update_wtf.html" après avoir cliqué sur "SUBMIT".
+            # Récupèrer la valeur du champ depuis "personne_update_wtf.html" après avoir cliqué sur "SUBMIT".
             # Puis la convertir en lettres minuscules.
             nom_personne_update = form_update.nom_personne_update_wtf.data
             nom_personne_update = nom_personne_update.capitalize()
@@ -203,7 +203,7 @@ def genre_update_wtf():
                   data_nom_genre["Nom_personne"])
 
 
-            # Afficher la valeur sélectionnée dans les champs du formulaire "genre_update_wtf.html"
+            # Afficher la valeur sélectionnée dans les champs du formulaire "personne_update_wtf.html"
             form_update.nom_personne_update_wtf.data = data_nom_genre["Nom_personne"]
             form_update.prenom_personne_update_wtf.data = data_nom_genre["Prenom_personne"]
             form_update.Date_naissance_personne_wtf.data = data_nom_genre["Date_naissance_personne"]
@@ -213,20 +213,20 @@ def genre_update_wtf():
                                       f"{genre_update_wtf.__name__} ; "
                                       f"{Exception_genre_update_wtf}")
 
-    return render_template("personne/genre_update_wtf.html", form_update=form_update)
+    return render_template("personnes/personne_update_wtf.html", form_update=form_update)
 
 
 """
     Auteur : OM 2021.04.08
     Définition d'une "route" /genre_delete
     
-    Test : ex. cliquer sur le menu "personne" puis cliquer sur le bouton "DELETE" d'un "genre"
+    Test : ex. cliquer sur le menu "personnes" puis cliquer sur le bouton "DELETE" d'un "genre"
     
     Paramètres : sans
     
     But : Effacer(delete) un genre qui a été sélectionné dans le formulaire "personne_afficher.html"
     
-    Remarque :  Dans le champ "nom_genre_delete_wtf" du formulaire "personne/genre_delete_wtf.html",
+    Remarque :  Dans le champ "nom_genre_delete_wtf" du formulaire "personnes/personne_delete_wtf.html",
                 le contrôle de la saisie est désactivée. On doit simplement cliquer sur "DELETE"
 """
 
@@ -249,11 +249,11 @@ def genre_delete_wtf():
 
             if form_delete.submit_btn_conf_del.data:
                 # Récupère les données afin d'afficher à nouveau
-                # le formulaire "personne/genre_delete_wtf.html" lorsque le bouton "Etes-vous sur d'effacer ?" est cliqué.
+                # le formulaire "personnes/personne_delete_wtf.html" lorsque le bouton "Etes-vous sur d'effacer ?" est cliqué.
                 data_films_attribue_genre_delete = session['data_films_attribue_genre_delete']
                 print("data_films_attribue_genre_delete ", data_films_attribue_genre_delete)
 
-                flash(f"Effacer la personne de façon définitive de la BD !!!", "danger")
+                flash(f"Effacer la personnes de façon définitive de la BD !!!", "danger")
                 # L'utilisateur vient de cliquer sur le bouton de confirmation pour effacer...
                 # On affiche le bouton "Effacer genre" qui va irrémédiablement EFFACER le genre
                 btn_submit_del = True
@@ -294,7 +294,7 @@ def genre_delete_wtf():
                 print("data_films_attribue_genre_delete...", data_films_attribue_genre_delete)
 
                 # Nécessaire pour mémoriser les données afin d'afficher à nouveau
-                # le formulaire "personne/genre_delete_wtf.html" lorsque le bouton "Etes-vous sur d'effacer ?" est cliqué.
+                # le formulaire "personnes/personne_delete_wtf.html" lorsque le bouton "Etes-vous sur d'effacer ?" est cliqué.
                 session['data_films_attribue_genre_delete'] = data_films_attribue_genre_delete
 
                 # Opération sur la BD pour récupérer "Id_personne" et "Nom_personne" de la "t_personne"
@@ -307,12 +307,12 @@ def genre_delete_wtf():
                 print("data_nom_genre ", data_nom_genre, " type ", type(data_nom_genre), " genre ",
                       data_nom_genre["Nom_personne"])
 
-            # Afficher la valeur sélectionnée dans le champ du formulaire "genre_delete_wtf.html"
+            # Afficher la valeur sélectionnée dans le champ du formulaire "personne_delete_wtf.html"
             form_delete.nom_genre_delete_wtf.data = data_nom_genre["Nom_personne"]
             form_delete.prenom_genre_delete_wtf.data = data_nom_genre["Prenom_personne"]
             form_delete.date_genre_delete_wtf.data = data_nom_genre["Date_naissance_personne"]
 
-            # Le bouton pour l'action "DELETE" dans le form. "genre_delete_wtf.html" est caché.
+            # Le bouton pour l'action "DELETE" dans le form. "personne_delete_wtf.html" est caché.
             btn_submit_del = False
 
     except Exception as Exception_genre_delete_wtf:
@@ -320,7 +320,7 @@ def genre_delete_wtf():
                                       f"{genre_delete_wtf.__name__} ; "
                                       f"{Exception_genre_delete_wtf}")
 
-    return render_template("personne/genre_delete_wtf.html",
+    return render_template("personnes/personne_delete_wtf.html",
                            form_delete=form_delete,
                            btn_submit_del=btn_submit_del,
                            data_films_associes=data_films_attribue_genre_delete)
