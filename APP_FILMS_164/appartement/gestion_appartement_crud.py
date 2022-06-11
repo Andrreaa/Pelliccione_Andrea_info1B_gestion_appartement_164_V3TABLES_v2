@@ -28,12 +28,12 @@ from APP_FILMS_164.appartement.gestion_appartement_wtf_forms import FormWTFUpdat
 """
 
 
-@app.route("/appartement_afficher/<string:order_by>/<int:id_appart_sel>", methods=['GET', 'POST'])
-def appartement_afficher(order_by, id_appart_sel):
+@app.route("/appartement_afficher/<string:order_by>/<int:id_details_sel>", methods=['GET', 'POST'])
+def appartement_afficher(order_by, id_details_sel):
     if request.method == "GET":
         try:
             with DBconnection() as mc_afficher:
-                if order_by == "ASC" and id_appart_sel == 0:
+                if order_by == "ASC" and id_details_sel == 0:
                     strsql_appartement_afficher = """SELECT Id_appartement, nom_appartement, pays, npa, ville, rue FROM t_appartement ORDER BY Id_appartement ASC"""
                     mc_afficher.execute(strsql_appartement_afficher)
                 elif order_by == "ASC":
@@ -42,7 +42,7 @@ def appartement_afficher(order_by, id_appart_sel):
                     # Pour "lever"(raise) une erreur s'il y a des erreurs sur les noms d'attributs dans la table
                     # donc, je précise les champs à afficher
                     # Constitution d'un dictionnaire pour associer l'id du genre sélectionné avec un nom de variable
-                    valeur_id_genre_selected_dictionnaire = {"value_id_genre_selected": id_appart_sel}
+                    valeur_id_genre_selected_dictionnaire = {"value_id_genre_selected": id_details_sel}
                     strsql_appartement_afficher = """SELECT Id_appartement, nom_appartement, pays, npa, ville, rue FROM t_appartement WHERE Id_appartement = %(value_id_genre_selected)s"""
 
                     mc_afficher.execute(strsql_appartement_afficher, valeur_id_genre_selected_dictionnaire)
@@ -56,15 +56,15 @@ def appartement_afficher(order_by, id_appart_sel):
                 print("data_genres ", data_genres, " Type : ", type(data_genres))
 
                 # Différencier les messages si la table est vide.
-                if not data_genres and id_appart_sel == 0:
+                if not data_genres and id_details_sel == 0:
                     flash("""La table "t_personne" est vide. !!""", "warning")
-                elif not data_genres and id_appart_sel > 0:
+                elif not data_genres and id_details_sel > 0:
                     # Si l'utilisateur change l'Id_personne dans l'URL et que le genre n'existe pas,
                     flash(f"Le personnes demandé n'existe pas !!", "warning")
                 else:
                     # Dans tous les autres cas, c'est que la table "t_personne" est vide.
                     # OM 2020.04.09 La ligne ci-dessous permet de donner un sentiment rassurant aux utilisateurs.
-                    flash(f"Données personnes affichés !!", "success")
+                    flash(f"Données appartements affichés !!", "success")
 
         except Exception as Exception_genres_afficher:
             raise ExceptionGenresAfficher(f"fichier : {Path(__file__).name}  ;  "
@@ -72,7 +72,7 @@ def appartement_afficher(order_by, id_appart_sel):
                                           f"{Exception_genres_afficher}")
 
     # Envoie la page "HTML" au serveur.
-    return render_template("personnes/personne_afficher.html", data=data_genres)
+    return render_template("appartement/appartement_afficher.html", data=data_genres)
 
 
 """
@@ -95,8 +95,8 @@ def appartement_afficher(order_by, id_appart_sel):
 """
 
 
-@app.route("/genres_ajouter", methods=['GET', 'POST'])
-def genres_ajouter_wtf():
+@app.route("/appartement_ajouter", methods=['GET', 'POST'])
+def appartement_ajouter_wtf():
     form = FormWTFAjouterGenres()
     if request.method == "POST":
         try:
@@ -117,11 +117,11 @@ def genres_ajouter_wtf():
                 print(f"Données insérées !!")
 
                 # Pour afficher et constater l'insertion de la valeur, on affiche en ordre inverse. (DESC)
-                return redirect(url_for('genres_afficher', order_by='DESC', id_appart_sel=0))
+                return redirect(url_for('genres_afficher', order_by='DESC', id_details_sel=0))
 
         except Exception as Exception_genres_ajouter_wtf:
             raise ExceptionGenresAjouterWtf(f"fichier : {Path(__file__).name}  ;  "
-                                            f"{genres_ajouter_wtf.__name__} ; "
+                                            f"{appartement_ajouter_wtf.__name__} ; "
                                             f"{Exception_genres_ajouter_wtf}")
 
     return render_template("appartement/appartement_ajouter_wtf.html", form=form)
@@ -147,8 +147,8 @@ def genres_ajouter_wtf():
 """
 
 
-@app.route("/genre_update", methods=['GET', 'POST'])
-def genre_update_wtf():
+@app.route("/appartement_update", methods=['GET', 'POST'])
+def appartement_update_wtf():
     # L'utilisateur vient de cliquer sur le bouton "EDIT". Récupère la valeur de "Id_personne"
     id_genre_update = request.values['id_personne_btn_edit_html']
 
@@ -190,7 +190,7 @@ def genre_update_wtf():
 
             # afficher et constater que la donnée est mise à jour.
             # Affiche seulement la valeur modifiée, "ASC" et l'"id_genre_update"
-            return redirect(url_for('genres_afficher', order_by="ASC", id_appart_sel=id_genre_update))
+            return redirect(url_for('appartement_afficher', order_by="ASC", id_details_sel=id_genre_update))
         elif request.method == "GET":
             # Opération sur la BD pour récupérer "Id_personne" et "Nom_personne" de la "t_personne"
             str_sql_id_genre = "SELECT Id_appartement, nom_appartement, pays, npa, ville, rue FROM t_appartement WHERE Id_appartement  = %(value_Id_appartement)s"
@@ -210,7 +210,7 @@ def genre_update_wtf():
 
     except Exception as Exception_genre_update_wtf:
         raise ExceptionGenreUpdateWtf(f"fichier : {Path(__file__).name}  ;  "
-                                      f"{genre_update_wtf.__name__} ; "
+                                      f"{appartement_update_wtf.__name__} ; "
                                       f"{Exception_genre_update_wtf}")
 
     return render_template("personnes/personne_update_wtf.html", form_update=form_update)
@@ -231,8 +231,8 @@ def genre_update_wtf():
 """
 
 
-@app.route("/genre_delete", methods=['GET', 'POST'])
-def genre_delete_wtf():
+@app.route("/appartement_delete", methods=['GET', 'POST'])
+def appartement_delete_wtf():
     data_films_attribue_genre_delete = None
     btn_submit_del = None
     # L'utilisateur vient de cliquer sur le bouton "DELETE". Récupère la valeur de "Id_personne"
@@ -245,7 +245,7 @@ def genre_delete_wtf():
         if request.method == "POST" and form_delete.validate_on_submit():
 
             if form_delete.submit_btn_annuler.data:
-                return redirect(url_for("genres_afficher", order_by="ASC", id_appart_sel=0))
+                return redirect(url_for("genres_afficher", order_by="ASC", id_details_sel=0))
 
             if form_delete.submit_btn_conf_del.data:
                 # Récupère les données afin d'afficher à nouveau
@@ -276,7 +276,7 @@ def genre_delete_wtf():
                 print(f"Genre définitivement effacé !!")
 
                 # afficher les données
-                return redirect(url_for('genres_afficher', order_by="ASC", id_appart_sel=0))
+                return redirect(url_for('genres_afficher', order_by="ASC", id_details_sel=0))
 
         if request.method == "GET":
             valeur_select_dictionnaire = {"value_id_genre": id_personne_delete}
@@ -317,7 +317,7 @@ def genre_delete_wtf():
 
     except Exception as Exception_genre_delete_wtf:
         raise ExceptionGenreDeleteWtf(f"fichier : {Path(__file__).name}  ;  "
-                                      f"{genre_delete_wtf.__name__} ; "
+                                      f"{appartement_delete_wtf.__name__} ; "
                                       f"{Exception_genre_delete_wtf}")
 
     return render_template("personnes/personne_delete_wtf.html",
